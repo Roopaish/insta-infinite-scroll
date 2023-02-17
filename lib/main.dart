@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Thrifters',
+      title: 'Instagram UI',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
         brightness: Brightness.dark,
@@ -48,119 +48,30 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        title: const Text("Thrifters",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.bookmark),
-            iconSize: 16,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.menu),
-            iconSize: 16,
-          ),
-        ],
-      ),
-      body: ListView(
+      body: GridView.builder(
         controller: controller,
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Search
-          Container(
-            height: 30,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 37, 35, 35),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            alignment: Alignment.center,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search",
-                hintStyle: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 0,
-                  ),
-                ),
+        itemCount: numberOfImages + 1,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 2,
+          crossAxisSpacing: 2,
+        ),
+        itemBuilder: (_, i) {
+          if (numberOfImages == i) {
+            return const LinearProgressIndicator();
+          } else {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
               ),
-            ),
-          ),
-
-          const SizedBox(
-            height: 10,
-          ),
-          // Categories
-          SizedBox(
-            height: 25,
-            width: double.infinity,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4,
-              itemBuilder: (_, i) => Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                height: 20,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey,
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  "Category$i",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
+              clipBehavior: Clip.hardEdge,
+              child: Image.network(
+                "https://source.unsplash.com/random/?$i",
+                fit: BoxFit.cover,
               ),
-            ),
-          ),
-
-          const SizedBox(
-            height: 16,
-          ),
-
-          GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              primary: false,
-              shrinkWrap: true,
-              itemCount: numberOfImages + 1,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 2,
-              ),
-              itemBuilder: (_, i) {
-                if (numberOfImages == i) {
-                  return Container(
-                      padding: const EdgeInsets.all(50),
-                      height: 50,
-                      child: const CircularProgressIndicator());
-                } else {
-                  return Image.network(
-                    "https://source.unsplash.com/random/?$i",
-                    fit: BoxFit.cover,
-                  );
-                }
-              })
-        ],
+            );
+          }
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
